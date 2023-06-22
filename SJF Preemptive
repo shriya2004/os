@@ -1,0 +1,72 @@
+#include<stdio.h>
+int main(){
+int maxct,rt[20],pid[20],at[20],min,bt[20],i,n,tat[20],wt[20],ct[20],j,temp,temp1,sum=0;
+int total = 0;
+float avgtat,avgwt,throughput;
+printf("enter no of processes : ");
+scanf("%d",&n);
+printf("enter arrival times :");
+for(i=0;i<n;i++){
+scanf("%d",&at[i]);
+}
+printf("enter burst times : ");
+for(i=0;i<n;i++){
+scanf("%d",&bt[i]);
+}
+for(i=0;i< -1;i++){
+   min=i;
+      for(j=i+1;j < n;j++){
+        if(at[j]< at[min]){
+          min=j;
+        }
+      }
+      temp=at[i];
+      at[i]=at[min];
+      at[min]=temp;
+      temp=bt[i];
+      bt[i]=bt[min];
+      bt[min]=temp;
+     temp=pid[i];
+     pid[i]=pid[min];
+     pid[min]=temp;
+    }
+for(i=0;i<n;i++){
+rt[i] = bt[i];
+}
+rt[n]=9999;
+   j=0;
+for(min=0;j!=n;min++){
+      temp=n;
+      for(i=0;i< n;i++){
+      if(at[i]<=min && rt[i]< rt[temp] && rt[i]>0){
+          temp=i;
+        }
+      }
+      rt[temp] = rt[temp]-1;
+      if(rt[temp]==0){
+      j++;
+        throughput=min+1;
+        ct[temp]=throughput;
+        if(maxct< throughput)
+        {
+          maxct=throughput;
+        }
+      }
+    }
+for(i=0;i<n;i++){
+tat[i]=ct[i]-at[i];
+total += tat[i];
+}
+avgtat = (float)total/n;
+for(i=0;i<n;i++){
+wt[i]= tat[i]-bt[i];
+sum += wt[i];
+}
+avgwt = (float)sum/n;
+printf("PID   AT    BT    CT   TAT    WT\n");
+for(i=0;i<n;i++){
+printf("p[%d]   %d    %d    %d    %d     %d\n",i,at[i],bt[i],ct[i],tat[i],wt[i]);
+}
+printf("\nAVERAGE TURN AROUND TIME IS %f\nAVERAGE WAITING TIME IS %f\n",avgtat,avgwt);
+return 0;
+}
